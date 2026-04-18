@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pinterest Video Downloader</title>
+</head>
+<body>
+    <h2>Pinterest Video Downloader</h2>
+    <input id="url" placeholder="Paste Pinterest URL" style="width:300px;">
+    <button onclick="download()">Download</button>
+
+    <script>
+    async function download() {
+        const url = document.getElementById("url").value;
+
+        const res = await fetch("/download", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({url})
+        });
+
+        if (res.ok) {
+            const blob = await res.blob();
+            const link = document.createElement("a");
+            link.href = window.URL.createObjectURL(blob);
+            link.download = "video.mp4";
+            link.click();
+        } else {
+            alert("Failed to download video");
+        }
+    }
+    </script>
+</body>
+</html>
